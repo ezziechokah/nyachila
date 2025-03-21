@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Niche Blog</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+    /* Hamburger menu container */
+#menuToggle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 2; /* Ensure it's above the menu */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Hamburger menu bars */
+#menuToggle div {
+    width: 30px;
+    height: 4px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+/* Navigation menu */
+#menu {
+    position: absolute;
+    top: 0;
+    left: -100%; /* Initially hide the menu */
+    width: 200px;
+    height: 100vh;
+    background-color: #444;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: left 0.3s ease;
+    z-index: 2;
+}
+
+/* Menu items */
+#menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column; /* Arrange items vertically */
+    align-items: flex-start; /* Align items to the start (optional) */
+}
+
+#menu ul li {
+    margin-bottom: 15px; /* Add spacing between each menu item */
+    text-align: center; /* Center-align menu items */
+}
+
+#menu ul li a {
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+}
+
+#menu ul li a:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    display: none; /* Initially hidden */
+    z-index: 1; /* Below the menu */
+}
+        /* Sticky Header */
+        header {
+            background: #0073e6;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000; /* Keeps header on top */
+        }
+
+        /* Sticky Navigation Bar */
+        nav {
+            background: #333;
+            color: white;
+            position: absolute; /* Keeps navbar fixed */
+            top: 35px; /* Position below the header */
+            width: 100%;
+            z-index: 999; /* Ensures navbar stays below header */
+            display: flex; /* Use flexbox for layout */
+            justify-content: center; /* Center the menu items */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            list-style-type: none; /* Remove bullets */
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            transition: transform 0.3s ease, color 0.3s ease; /* Smooth animation for transformation and color */
+            display: inline-block; /* Ensures the transform effect works */
+        }
+        .navbar a:hover {
+            transform: scale(1.1); /* Slightly enlarge the link */
+            color: yellow; /* Change the color when hovering */
+}
+        /* Main Content Padding */
+        main {
+            padding: 20px;
+            margin-top: 120px; /* Accounts for fixed header and navbar */
+        }
+
+        section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer Styling */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        #footerLogo {
+    position: absolute;
+    left: 10px; /* Adjust for spacing */
+    height: auto; /* Maintain aspect ratio */
+    transition: all 0.3s ease;
+    width: 150px; /* Adjust size as needed */
+    height: 150px; /* Ensure the width and height are equal */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image fits perfectly */
+    border: 4px solid #757e88; /* Optional: Add a border around the image */
+}
+
+#footerLogo:hover {
+    animation: blink 0.5s infinite; /* Apply blinking animation */
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+        /* Social Media Icon Colors */
+        .social-media a {
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 24px; /* Adjust icon size */
+        }
+
+        .facebook i { color: #1877F2; } /* Facebook Blue */
+        .twitter i { color: #1DA1F2; } /* Twitter Blue */
+        .telegram i { color: #0088CC; } /* Telegram Blue */
+        .x i { color: #000; } /* X Black */
+        .youtube i { color: #FF0000; } /* YouTube Red */
+        .tiktok i { color: #000000; } /* TikTok Black */
+        .instagram i { color: #C13584; } /* Instagram Gradient Pink */
+
+        /* Hover Effect */
+        .social-media a:hover i {
+            opacity: 0.8; /* Slight fade effect */
+        }
+         /* Add styling for Google Translate */
+         #google_translate_element {
+            margin-top: 20px;
+            text-align: center;
+            left: 70%;
+            top: 10px;
+            right: 20px;
+            z-index: 999;
+            position: absolute;
+            font-size: 10px;
+        }
+        #google_translate_element {
+    text-align: center;
+    margin-top: 10px;
+}
+#backToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none; /* Hidden by default */
+    padding: 10px;
+    width: 60px; 
+    height: 50px;
+    background-color: #4712c5;
+    color: white;
+    border: none;
+    border-radius: 50%; /* Make it round */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0; /* Start invisible */
+    transform: translateY(20px); /* Start slightly off-screen */
+    transition: opacity 0.9s, transform 0.9s; /* Smooth transition */
+}
+#backToTop:hover {
+    background-color: #1962b1;
+}
+
+/* Responsive Design for Small Screens */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column; /* Stack items vertically */
+        align-items: center; /* Center items on the screen */
+    }
+
+    .navbar a {
+        width: 90%; /* Make buttons take up most of the screen */
+        text-align: center; /* Center-align the text */
+    }
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        
+            <div id="menuToggle">
+                <!-- The three bars -->
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <nav id="menu">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div id="overlay"></div>
+            <script>
+                const menuToggle = document.getElementById("menuToggle");
+const menu = document.getElementById("menu");
+const overlay = document.getElementById("overlay");
+
+// Function to open the menu
+function openMenu() {
+    menu.style.left = "0px"; // Show the menu
+    overlay.style.display = "block"; // Show the overlay
+}
+
+// Function to close the menu
+function closeMenu() {
+    menu.style.left = "-100%"; // Hide the menu
+    overlay.style.display = "none"; // Hide the overlay
+}
+
+// Open the menu when the hamburger icon is clicked
+menuToggle.onclick = openMenu;
+
+// Close the menu when clicking on the overlay
+overlay.onclick = closeMenu;
+
+            </script>
+        
+        <h1>Welcome to Nyachila Blog</h1>
+        <p>Your ultimate destination for inspiration, tips, and insights across diverse topics!</p>
+        <div id="google_translate_element">choose your preferred language here</div>
+        <script type="text/javascript">
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement({
+                    pageLanguage: 'en'
+                }, 'google_translate_element');
+            }
+        </script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</header>
+        <nav>
+        <ul class="navbar">
+            <li><a href="#tech">Technology & Gadgets</a></li>
+            <li><a href="#travel">Travel & Adventure</a></li>
+            <li><a href="#food">Food & Recipes</a></li>
+            <li><a href="#lifestyle">Lifestyle & Personal Development</a></li>
+            <li><a href="#education">Education & Tutorials</a></li>
+            <li><a href="#health">Health & Fitness</a></li>
+            <li><a href="#finance">Finance & Investing</a></li>
+            <li><a href="#entertainment">Entertainment</a></li>
+        </ul>
+    </nav>
+</header>
+    <main>
+        <section id="tech">
+ <div style="position: relative; width: 100%; height: 36.67vh; overflow: hidden;">
+<img src="images/danaone.jpg" style="width: 100%; object-fit: cover;">
+<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgb(98, 14, 231); font-size: 16px; background-color: rgba(0, 0, 0, 0.5); padding: 5px;">
+    Hello and WELCOME 🤗!
+  </div>
+</div>
+            <h2>Technology & Gadgets</h2>
+            <p>Stay ahead of the curve with the latest insights on cutting-edge gadgets, breakthrough tech trends, and in-depth software tutorials. Whether you're a tech enthusiast or a curious learner, this section has something for everyone!</p>
+        </section>
+        <section id="travel">
+            <h2>Travel & Adventure</h2>
+            <p>Explore captivating destinations, discover hidden gems, and uncover tips for unforgettable adventures. Whether you're planning your next trip or just love exploring from your screen, let your wanderlust soar!</p>
+        </section>
+        <section id="food">
+            <h2>Food & Recipes</h2>
+            <p>Delight your taste buds with delicious recipes, food reviews, and culinary tips. From quick weekday meals to gourmet indulgences, find inspiration for every occasion in this flavorful corner of the blog!</p>
+        </section>
+        <section id="lifestyle">
+            <h2>Lifestyle & Personal Development</h2>
+            <p>Discover insightful tips on self-care, productivity hacks, and life lessons to inspire a balanced and fulfilling life. Transform your daily routine into an empowering journey!</p>
+        </section>
+        <section id="education">
+            <h2>Education & Tutorials</h2>
+            <p>Unlock your potential with step-by-step tutorials and actionable resources. Whether you're mastering new software, diving into graphic design, or learning to code, this section is your guide to success.</p>
+        </section>
+        <section id="health">
+            <h2>Health & Fitness</h2>
+            <p>Empower your mind and body with practical advice on wellness, fitness routines, and healthy eating. Let’s build a healthier, happier you—one step at a time.</p>
+        </section>
+        <section id="finance">
+            <h2>Finance & Investing</h2>
+            <p>Learn how to make the most of your money with expert tips on budgeting, saving, and investing. Simplify your financial journey and achieve your dreams with confidence.</p>
+        </section>
+        <section id="entertainment">
+            <h2>Entertainment</h2>
+            <p>Dive into the world of movies, music, books, and pop culture. From honest reviews to captivating recommendations, this is your backstage pass to entertainment that matters!</p>
+        </section>
+    </main>
+    <button id="backToTop">Back to Top</button>
+    <script>
+        // Get the button element
+const backToTopButton = document.getElementById("backToTop");
+
+// Show the button when scrolling down
+window.onscroll = function() {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        backToTopButton.style.display = "block";
+        backToTopButton.style.opacity = 1; // Make it visible
+        backToTopButton.style.transform = "translateY(0)"; // Slide in
+    } else {
+        backToTopButton.style.opacity = 0; // Fade out
+        backToTopButton.style.transform = "translateY(20px)"; // Slide out
+        setTimeout(() => backToTopButton.style.display = "none", 500); // Delay hiding
+    }
+};
+// Scroll to the top when the button is clicked
+backToTopButton.onclick = function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+    </script>
+    <footer>
+        <h3>Contact Us</h3>
+        <p>We love to hear from you! Reach out with any questions, feedback, or suggestions.</p>
+        <footer>
+            <img src="images/danascreenone.png" alt="Logo" id="footerLogo">
+        </footer>
+        
+        <ul>
+            <li><strong>Phone:</strong> +254-768-334-471</li>
+            <li><strong>Email:</strong> nyachila@gmail.com</li>
+            <li><strong>Website:</strong> <a href="http://www.blog.com">www.nyachilablog.com</a></li>
+            <li><strong>Address:</strong> 123 Blog Street, Nairobi, Kenya</li>
+        </ul>
+        <p><a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms of Use</a></p>
+       
+        <div class="social-media">
+            <p>Follow us on:</p>
+            <a href="https://www.facebook.com" target="_blank" title="Facebook" class="facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://twitter.com" target="_blank" title="Twitter" class="twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://telegram.org" target="_blank" title="Telegram" class="telegram">
+                <i class="fab fa-telegram-plane"></i>
+            </a>
+            <a href="https://x.com" target="_blank" title="X (formerly Twitter)" class="x">
+                <i class="fab fa-x-twitter"></i>
+            </a>
+            <a href="https://www.youtube.com" target="_blank" title="YouTube" class="youtube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://www.tiktok.com" target="_blank" title="TikTok" class="tiktok">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://www.instagram.com" target="_blank" title="Instagram" class="instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+        <p>© 2025 Nyachila Blog | All Rights Reserved</p>
+    </footer>
+</body>
+</html>
